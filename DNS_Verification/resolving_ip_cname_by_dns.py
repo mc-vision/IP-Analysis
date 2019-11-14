@@ -44,7 +44,7 @@ class DomainRecord(object):
                 r = str(r.to_text())
                 for i in r.split('\n'):  # 注意
                     i = i.split(' ')
-                    rc_type,rc_data,rc_ttl = i[3], i[4], i[1]
+                    rc_type, rc_data, rc_ttl = i[3], i[4], i[1]
                     if rc_type == 'A':
                         self.ipv4.append(rc_data)
                     elif rc_type == 'CNAME':
@@ -76,5 +76,5 @@ def obtaining_domain_ip(original_domain, local_dns=None):
 
 if __name__ == '__main__':
     print obtaining_domain_ip('www.zhihu.com')
-    print obtaining_domain_ip('www.xfcxc.top')
+    print obtaining_domain_ip('weilin9j.com')
 
