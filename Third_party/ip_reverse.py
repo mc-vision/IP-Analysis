@@ -118,7 +118,7 @@ class AizhanSpider(object):
         获取页面源
         :param ip: 
         :param page_index: 
-        :return: 
+        :return:
         """
         if page_index<0:
             print "page index is error!"
@@ -189,4 +189,5 @@ def exper(ip, spider_id):
 
 if __name__ == "__main__":
     print exper('39.106.165.57', spider_id=[1, 2, 3])
+
 
