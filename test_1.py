@@ -42,7 +42,7 @@ def ip_check(ip):
     for info in ip_same:
         domain, ip_final = info[0], info[1]
         if domain:
-            sql = """INSERT INTO ip_mapping_relations (ip_origin, domain, ip) VALUES ('{ip_origin}', '{domain}', '{ip}') """.format(
+            sql = """INSERT INTO ip_mapping_relations_real (ip_origin, domain, ip) VALUES ('{ip_origin}', '{domain}', '{ip}') """.format(
                                     ip_origin=ip, domain=domain, ip=';'.join(ip_final)
             )
             print sql
@@ -52,7 +52,7 @@ def ip_check(ip):
     for info in ip_diff:
         domain, ip_final = info[0], info[1]
         if domain:
-            sql = """INSERT INTO ip_mapping_relations (ip_origin, domain, ip) VALUES ('{ip_origin}', '{domain}', '{ip}') """.format(
+            sql = """INSERT INTO ip_mapping_relations_real (ip_origin, domain, ip) VALUES ('{ip_origin}', '{domain}', '{ip}') """.format(
                 ip_origin=ip, domain=domain, ip=';'.join(ip_final)
             )
             print sql

@@ -17,6 +17,12 @@ class DB:
         try:
             self.db = MySQLdb.connect(**mysql_conf)
             self.cursor = self.db.cursor()
+            self.cursor.execute("select ip_origin, domain, ip from ip_mapping_relations_real where ip_origin != ip;")
+            for i in self.cursor.fetchall():
+                if i[2] == '':
+                    print i[0], i[1], 'Null'
+                else:
+                    print i[0], i[1], i[2]
         except Exception as e:
             print e
 
@@ -29,5 +35,5 @@ class DB:
 
 
 if __name__ == '__main__':
-    DB().insert("sss")
+    DB()
     pass
