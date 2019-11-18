@@ -6,7 +6,8 @@
 """
 import multiprocessing
 import time
-from Driver_Base import  BaseDriver
+from Driver_Base import BaseDriver
+
 
 class BaiduDefender(object):
     """
@@ -108,6 +109,6 @@ class BaiduDefender(object):
 if __name__ == "__main__":
     #单点测试
     domain_list=list()
-    domain_list.append('000.com')
+    domain_list.append('1aaaww.com')
     for domain in domain_list:
         print BaiduDefender.detect_domain(domain)
