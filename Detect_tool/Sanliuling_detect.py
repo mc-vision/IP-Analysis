@@ -133,5 +133,5 @@ class Sanliuling(object):
 
 
 if __name__ == "__main__":
-    domain = '0151b.com'#'0411hy.com'
+    domain = '0151b.com'  # '0411hy.com'
     print Sanliuling.detect_domain(domain)

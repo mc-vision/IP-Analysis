@@ -54,7 +54,7 @@ class BaiduDefender(object):
         result = None
         count = 0
         while not result:
-            dv =  BaiduDefender.send_domain(domain,dv)
+            dv = BaiduDefender.send_domain(domain,dv)
             xpath = '//*[@id="result-icon"]/div'#查找元素
             res = dv.find_elements_by_xpath(xpath)
             #print('ok1')#

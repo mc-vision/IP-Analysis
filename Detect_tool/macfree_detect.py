@@ -10,6 +10,7 @@ import urllib2
 import time
 from bs4 import BeautifulSoup
 
+
 class Macfree():
     """
     macfree检测网站危险程度
