@@ -75,6 +75,6 @@ def obtaining_domain_ip(original_domain, local_dns=None):
 
 
 if __name__ == '__main__':
-    print obtaining_domain_ip('www.zhihu.com')
-    print obtaining_domain_ip('weilin9j.com')
+    # print obtaining_domain_ip('www.zhihu.com')
+    print obtaining_domain_ip('intwolf.com')
 
