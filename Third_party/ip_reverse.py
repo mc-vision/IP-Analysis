@@ -188,6 +188,6 @@ def exper(ip, spider_id):
 
 
 if __name__ == "__main__":
-    print exper('59.111.105.5', spider_id=[1, 2, 3])
+    print exper('119.97.142.82', spider_id=[1, 2, 3])
 
 
