@@ -17,8 +17,8 @@ from email.header import Header
 class renzo:
      t = ""
      title = ""
-     filelog = "log.txt"#网站上次更新时间
-     filename0 = ""#从网站上获取的数据
+     filelog = "log.txt"  # 网站上次更新时间
+     filename0 = ""  # 从网站上获取的数据
      filename1 = ""
      filename2 = ""
      urls = []
