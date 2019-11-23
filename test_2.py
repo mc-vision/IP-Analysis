@@ -31,35 +31,27 @@ IP_POOL_4 = """113.106.14.
 
 def ip_check(ip):
     domains = exper(ip, spider_id=[1, 2, 3])
-    ip_same, ip_diff = [], []
+    ip_domain_relations = []
     for domain in domains:
         ip_temp = obtaining_domain_ip(domain)
-        if ip in ip_temp:
-            ip_same.append([domain, ip_temp])
-        else:
-            ip_diff.append([domain, ip_temp])
+        for ip in ip_temp:
+            ip_domain_relations.append([domain, ip_temp])
 
-    for info in ip_same:
+    for info in ip_domain_relations:
         domain, ip_final = info[0], info[1]
-        if domain:
-            sql = """INSERT INTO ip_mapping_relations_real (ip_origin, domain, ip) VALUES ('{ip_origin}', '{domain}', '{ip}') """.format(
+        if ip in ip_final:
+            sql = """INSERT INTO ip_domains (origin_ip, domain, dns_ip) VALUES ('{ip_origin}', '{domain}', '{ip}') """.format(
                                     ip_origin=ip, domain=domain, ip=';'.join(ip_final)
             )
             print sql
             DB().insert(sql)
         else:
-            pass
-    for info in ip_diff:
-        domain, ip_final = info[0], info[1]
-        if domain:
-            sql = """INSERT INTO ip_mapping_relations_real (ip_origin, domain, ip) VALUES ('{ip_origin}', '{domain}', '{ip}') """.format(
+            sql = """INSERT INTO ip_domain_history (origin_ip, domain, dns_ip) VALUES ('{ip_origin}', '{domain}', '{ip}') """.format(
                 ip_origin=ip, domain=domain, ip=';'.join(ip_final)
             )
             print sql
             DB().insert(sql)
-        else:
             pass
-
 
 def fun():
     print "fun start"
