@@ -98,5 +98,5 @@ class TencentManager(object):
 
 if __name__ == "__main__":
     # 单点测试
-    domain = '0151b.com'
+    domain = 'weihaiexpo.cn'
     print TencentManager.detect_domain(domain)

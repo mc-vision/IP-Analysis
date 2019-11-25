@@ -50,7 +50,7 @@ def func():
 
 
 if __name__ == '__main__':
-    # ip_check('61.135.169.121')
+    ip_check('45.203.98.222')
     """
     for ip in IP_POOL.splitlines():
         ip = ip.strip()
@@ -59,7 +59,7 @@ if __name__ == '__main__':
             single_ip = ip+str(i)
             ip_check(single_ip)
     """
-    gevent.joinall([
-        gevent.spawn(func)
-    ])
+    # gevent.joinall([
+    #     gevent.spawn(func)
+    # ])
 
