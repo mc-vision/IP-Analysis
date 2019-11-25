@@ -2475,3 +2475,4 @@ degaojd.com"""
     domain_list=domain_list.splitlines()
     for domain in domain_list:
         print BaiduDefender.detect_domain(domain)
+    # new types
