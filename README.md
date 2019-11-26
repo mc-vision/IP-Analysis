@@ -7,5 +7,5 @@ IP恶意性分析
 developing...  
 
 ### 数据流
-![](https://github.com/JX-Wang/IP-Analysis/blob/master/frame/pattern_1.jpg)  
+![](https://github.com/JX-Wang/IP-Analysis/blob/master/frame/pattern1.jpg)  
 
