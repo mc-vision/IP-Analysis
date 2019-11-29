@@ -26,7 +26,7 @@ class BaseDriver(object):
         dcap["phantomjs.page.settings.userAgent"] = USER_AGENTS[random.randint(0,len(USER_AGENTS)-1)]
         dcap["phantomjs.page.settings.resourceTimeout"] = timeout
         # 代理
-        daili = Dailis_pool[random.randint(0,len(USER_AGENTS)-1)]
+        daili = Dailis_pool[random.randint(0, len(USER_AGENTS)-1)]
         daili = daili['ip']+':'+daili['port']
         if daili != '127.0.0.1:80':
             proxy = webdriver.Proxy()
@@ -52,6 +52,9 @@ class BaseDriver(object):
             }
         }
         chromeOptions.add_experimental_option("prefs", prefs)
+        chromeOptions.add_argument('--headless')
+        chromeOptions.add_argument('--no-sandbox')
+        chromeOptions.add_argument('--disable-dev-shm-usage')
         cur_daili = Dailis_pool[random.randint(0,len(Dailis_pool)-1)]
         user_agent = USER_AGENTS[random.randint(0,len(USER_AGENTS)-1)]
         daili = cur_daili['type']+'://'+cur_daili['ip'] + ':' + cur_daili['port']
@@ -59,7 +62,7 @@ class BaseDriver(object):
         if daili != "http://127.0.0.1:80":
             chromeOptions.add_argument('--proxy-server='+daili)
             print "当前使用的代理是", daili
-        dv = webdriver.Chrome(executable_path=chrome_path,chrome_options=chromeOptions)
+        dv = webdriver.Chrome(executable_path=chrome_path, chrome_options=chromeOptions)
         dv.set_page_load_timeout(timeout)
         dv.set_script_timeout(timeout)
 
