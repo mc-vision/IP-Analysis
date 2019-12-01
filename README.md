@@ -9,13 +9,13 @@
 * 次级域名获取
 * 恶意性分析与取证
 ### 系统架构
-![](https://github.com/JX-Wang/IP-Analysis/blob/master/frame/new_frame_2.jpg)   
+![](https://github.com/JX-Wang/IP-Analysis/blob/master/Frame/new_frame_2.jpg)   
 
 ### 主要数据流
-![](https://github.com/JX-Wang/IP-Analysis/blob/master/frame/pattern1.jpg)  
+![](https://github.com/JX-Wang/IP-Analysis/blob/master/Frame/pattern1.jpg)  
 
 ### 详细设计
-![](https://github.com/JX-Wang/IP-Analysis/blob/master/frame/pattern1.jpg)  
+![](https://github.com/JX-Wang/IP-Analysis/blob/master/Frame/pattern1.jpg)  
 
 ### 数据库设计
 ![](https://developing)  
