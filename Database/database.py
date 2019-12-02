@@ -8,10 +8,10 @@ import MySQLdb
 class DB:
     def __init__(self):
         mysql_conf = {
-            "host": "10.245.146.37",
-            "user": "root",
-            "passwd": "platform",
-            "db": "ip_domains",
+            "host": "10.xx.xx.xx",
+            "user": "xxx",
+            "passwd": "xxx",
+            "db": "xxx",
             "charset": "utf8"
         }
         try:
