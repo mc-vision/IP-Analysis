@@ -5,7 +5,7 @@
 
 ### 大致思路
 对于IP的恶意性判断主要采用方法的是对IP对应的域名所提供的服务进行性质判断，核心的思路大致为下图所示  
-![](https://github.com/JX-Wang/IP-Analysis/blob/master/Frame/ideas.jpg)  
+![](https://github.com/JX-Wang/IP-Analysis/blob/master/Frame/ideas_new.jpg)  
 1. 对 IP 进行反向解析，得到可能与之绑定的域名
 2. 对第1步得到域名进行DNS解析，得到IP地址后与源IP进行对比，判断一致性
 3. 将第2步得到的符合条件的域名进行恶意性检测，判断域名的性质，从而判断IP的性质
