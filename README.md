@@ -1,4 +1,4 @@
-# IP恶意性分析系统
+# 面向IP地址的异常域名分析挖掘与取证
 ![](https://img.shields.io/badge/license-WTFPL-blue.svg) ![](https://img.shields.io/github/repo-size/JX-Wang/IP-Analysis.svg) ![](https://img.shields.io/bitbucket/issues-raw/JX-Wang/IP-Analysis.svg) ![](https://img.shields.io/github/forks/JX-Wang/IP-Analysis.svg?label=Fork) ![](https://img.shields.io/github/stars/JX-Wang/IP-Analysis.svg?style=social)  
 ### 系统介绍
 该系统主要解决的问题为分析一个IP地址的恶意性，输入一个IP或者IP段(全球)，输出该IP/段的关联域名/证书以及其恶意性，包括安全，赌博，色情，钓鱼，诈骗，恶意软件等  
