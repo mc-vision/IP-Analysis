@@ -41,8 +41,8 @@ developing...
 
 ### 使用到的技术
 * Python2.x
-* MySQL5.7.x
-* Kafka
-* Zookeeper
-* ElasticSearch
-* 其他web类 还未计划
+* MySQL5.7.x M/S 分布式数据库
+* Kafka/RabbitMQ 消息队列
+* Zookeeper 集群注册中心
+* ElasticSearch 检索
+* 其他web类作为前端 还未计划
