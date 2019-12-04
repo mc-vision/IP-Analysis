@@ -37,7 +37,7 @@ developing...
 ![](https://github.com/JX-Wang/IP-Analysis/blob/master/Frame/)  
 
 ### 数据库设计
-![](https://github.com/JX-Wang/IP-Analysis/blob/master/Frame/db_design.jpg)  
+![](https://github.com/JX-Wang/IP-Analysis/blob/master/Frame/database_design.jpg)  
 
 ### 使用到的技术
 * Python 2.x
