@@ -40,8 +40,8 @@ developing...
 ![](https://github.com/JX-Wang/IP-Analysis/blob/master/Frame/DB_design.jpg)  
 
 ### 使用到的技术
-* Python2.x
-* MySQL5.7.x M/S 分布式数据库
+* Python 2.x
+* MySQL 5.7.x M/S 分布式数据库
 * Kafka/RabbitMQ 消息队列
 * Zookeeper 集群注册中心
 * ElasticSearch 检索
