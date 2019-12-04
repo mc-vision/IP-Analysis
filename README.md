@@ -33,7 +33,8 @@ DNS验证模块主要使用DNS探测域名的A记录，从而来比对IP的一�
 ![](https://github.com/JX-Wang/IP-Analysis/blob/master/Frame/pattern1.jpg)  
 
 ### 详细设计
-![](https://github.com/JX-Wang/IP-Analysis/blob/master/Frame/pattern1.jpg)  
+developing...
+![](https://github.com/JX-Wang/IP-Analysis/blob/master/Frame/)  
 
 ### 数据库设计
 ![](https://github.com/JX-Wang/IP-Analysis/blob/master/Frame/DB_design.jpg)  
