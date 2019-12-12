@@ -1,7 +1,6 @@
 # encoding: utf-8
-
 """
-同a/ip记录反查域名
+同a/ip记录反查域名，通过第三方网站进行ip的反查
 """
 import sys
 sys.setrecursionlimit(10000)

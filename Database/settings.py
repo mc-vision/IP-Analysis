@@ -13,6 +13,7 @@
  Attention: This program does't need to be executed!
 """
 
+
 class DataBaseConf(object):
     def __init__(self):
-
+        pass
