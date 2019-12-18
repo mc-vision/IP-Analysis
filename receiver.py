@@ -3,10 +3,12 @@
 import dns.resolver
 import pika
 import gevent
-from gevent import monkey; monkey.patch_all()
+from gevent import monkey
+monkey.patch_all()
 from gevent.pool import Pool
 import time
 import random
+from domains import domains
 
 success = 0
 failed = 0
@@ -51,47 +53,51 @@ def get_a_record(domain):
         A = dns.resolver.query(domain, 'A')
         for i in A.response.answer:
             for j in i.items:
-                print domain, j.address
+                # print domain, j.address
+                pass
         success += 1
-        RAMQ.channel.basic_publish(exchange='', routing_key='rest', body=domain)
+        # RAMQ.channel.basic_publish(exchange='', routing_key='rest', body=domain)
     except:
-        print domain, 'failed'
+        # print domain, 'failed'
         failed += 1
 
 
 def gevent_pool(message):
-    p = Pool(500)
-    jobs = []
-    domains = message.split('\n')
-    split_num = 20000
-    start = time.time()
-    for n in range(0, len(domains), split_num):
-        domain_set = domains[n:n+split_num]
-        print domain_set
-        for domain in domain_set:
-            jobs.append(p.spawn(get_a_record, domain))
-        gevent.joinall(jobs)
-    print 'Total time:', time.time() - start
-    print 'Success: ', str(success)
-    print 'Failed: ', str(failed)
+    f = open('rst.txt', 'a+')
+    for coroutine_num in range(500, 6000, 500):
+        p = Pool(coroutine_num)
+        jobs = []
+        domains = message.split('\n')
+        split_num = 20000
+        start = time.time()
+        for n in range(0, len(domains), split_num):
+            domain_set = domains[n:n+split_num]
+            print domain_set
+            for domain in domain_set:
+                jobs.append(p.spawn(get_a_record, domain))
+            gevent.joinall(jobs)
+        print >> f, str(coroutine_num) + ' ' + str(time.time() - start) + ' ' + str(success) + ' ' + str(failed)
+    f.close()
 
 
 if __name__ == '__main__':
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters(host='120.24.170.233',
-                                  credentials=pika.PlainCredentials("hitnslab", "hitnslab")))
-    channel = connection.channel()
-
-    channel.queue_declare(queue='hello')
-
-
-    def callback(ch, method, properties, body):
-        print(" [x] Received %r" % body)
-        gevent_pool(body)
-
-    channel.basic_consume(
-        queue='hello', on_message_callback=callback, auto_ack=True)
-
-    print(' [*] Waiting for messages. To exit press CTRL+C')
-
-    channel.start_consuming()
+    # connection = pika.BlockingConnection(
+    #     pika.ConnectionParameters(host='120.24.170.233',
+    #                               credentials=pika.PlainCredentials("hitnslab", "hitnslab")))
+    # channel = connection.channel()
+    #
+    # channel.queue_declare(queue='hello')
+    #
+    #
+    # def callback(ch, method, properties, body):
+    #     print(" [x] Received %r" % body)
+    #     gevent_pool(body)
+    #
+    # channel.basic_consume(
+    #     queue='hello', on_message_callback=callback, auto_ack=True)
+    #
+    # print(' [*] Waiting for messages. To exit press CTRL+C')
+    #
+    # channel.start_consuming()
+   while True:
+       gevent_pool(domains)

@@ -20,7 +20,7 @@ class BGPSpider(DriverHandler):
 
     def __init__(self, timeout=60):
 
-        DriverHandler.__init__(self,'chrome',max_time=timeout)
+        DriverHandler.__init__(self, 'chrome', max_time=timeout)
         self.result = {}
         self.counter=0
         self.base_url = 'https://bgp.he.net/ip/{ip}#_dns'
