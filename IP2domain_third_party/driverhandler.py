@@ -13,7 +13,7 @@ class DriverHandler(object):
     """
     driverhandler:无界面web驱动柄
     """
-    def __init__(self,*args,**kwargs):
+    def __init__(self, *args, **kwargs):
         """
         最长加载时间max_time
         等待时间wait_time
