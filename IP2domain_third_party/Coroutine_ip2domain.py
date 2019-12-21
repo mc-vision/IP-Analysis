@@ -206,7 +206,7 @@ def coroutine_exper(origin_ip):
     coroutine_num = 5
     for coroutine_now in range(coroutine_num, 41, 3):
         p = Pool(coroutine_now)
-        split_num = 3
+        split_num = 5
         jobs = []
         start = time.time()
         # print origin_ip
@@ -216,7 +216,9 @@ def coroutine_exper(origin_ip):
                 jobs.append(p.spawn(exper, ip, [1, 2, 3]))
             print "coroutine start!"
             gevent.joinall(jobs)
+            print success, " ", failed
         print >>f, str(coroutine_now) + ' ' + str(success) + ' ' + str(failed) + ' ' + str(time.time() - start)
+        print str(coroutine_now) + ' ' + str(success) + ' ' + str(failed) + ' ' + str(time.time() - start)
         success, failed = 0, 0
     f.close()
 
@@ -224,4 +226,5 @@ def coroutine_exper(origin_ip):
 if __name__ == "__main__":
     # print exper('119.97.142.82', spider_id=[1, 2, 3])
     ips = ips.split('\n')
-    coroutine_exper(ips)
+    while True:
+        coroutine_exper(ips)
