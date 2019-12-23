@@ -217,8 +217,10 @@ def coroutine_exper(origin_ip):
             print "coroutine start!"
             gevent.joinall(jobs)
             print success, " ", failed
-        print >>f, str(coroutine_now) + ' ' + str(success) + ' ' + str(failed) + ' ' + str(time.time() - start)
-        print str(coroutine_now) + ' ' + str(success) + ' ' + str(failed) + ' ' + str(time.time() - start)
+        print >>f, str(coroutine_now) + ' ' + str(success) + ' ' + str(failed) + ' ' + str(time.time() - start) + ' ' +\
+            str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+        print str(coroutine_now) + ' ' + str(success) + ' ' + str(failed) + ' ' + str(time.time() - start) + ' ' + str(
+            time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
         success, failed = 0, 0
     f.close()
 
