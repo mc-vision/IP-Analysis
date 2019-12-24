@@ -1,6 +1,11 @@
 # encoding: utf-8
 """
 同a/ip记录反查域名，通过第三方网站进行ip的反查
+注意：这是一个用来测试并发性能的代码，系统运行时不需要运行这个py文件
+
+Attention: this program doesn't to be executed anytime!
+
+Author @ Wangjunxiong
 """
 import sys
 sys.setrecursionlimit(10000)

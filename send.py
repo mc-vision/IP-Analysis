@@ -1,13 +1,16 @@
+#!/usr/bin/env python
 import pika
-from domains import domains
+
 connection = pika.BlockingConnection(
-    pika.ConnectionParameters(host='120.24.170.233', port=5672,
-                              credentials=pika.PlainCredentials("hitnslab", "hitnslab")))
+    pika.ConnectionParameters(host='10.245.146.146', port=5672,
+                              credentials=pika.PlainCredentials("hit", "hit")))
+
 channel = connection.channel()
 
-channel.queue_declare(queue='hello')
+channel.queue_declare(queue='dns_verification')
 
-channel.basic_publish(exchange='', routing_key='hello', body=domains)
-print(" [x] Sent %s" % domains)
-
+channel.basic_publish(exchange='',
+                      routing_key='dns_verification',
+                      body='10.245.146.146')
+print(" [x] Sent 'Hello World!'")
 connection.close()
