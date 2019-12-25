@@ -7,10 +7,10 @@ connection = pika.BlockingConnection(
 
 channel = connection.channel()
 
-channel.queue_declare(queue='dns_verification')
+channel.queue_declare(queue='origin_ip')
 
 channel.basic_publish(exchange='',
-                      routing_key='dns_verification',
+                      routing_key='origin_ip',
                       body='10.245.146.146')
 print(" [x] Sent 'Hello World!'")
 connection.close()
