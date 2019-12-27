@@ -62,11 +62,11 @@ class BaiduDefender(object):
             if len(res)!=0:
                 result = res[0].get_attribute('class').strip()
                 if result == "result_unknown":
-                    result = "未知"
+                    result = "unknown"
                 elif result == "result_safety":
-                    result = "安全"
+                    result = "safety"
                 elif result == "result_danger":
-                    result = "危险"
+                    result = "danger"
             else:
                 dv = BaiduDefender.driver_homeweb(dv=dv)
             count += 1
@@ -80,7 +80,7 @@ class BaiduDefender(object):
 
         dv = BaiduDefender.driver_homeweb()
         # print ("%s detecting..."%domain)
-        print domain,
+        # print domain,
         dv, result = BaiduDefender.detect_malicious(domain, dv)
         #print('return ok')#
         BaseDriver.quit_driver(dv)

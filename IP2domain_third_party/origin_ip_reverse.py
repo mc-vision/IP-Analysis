@@ -13,7 +13,7 @@ from ip_reverse import exper
 from gevent.pool import Pool  # 协程池
 import gevent
 import pika
-import multiprocessing  # 多进程
+from multiprocessing import Process  # 多进程
 
 
 class OriginIpReverse:
@@ -28,7 +28,8 @@ class OriginIpReverse:
 
     def callback(self, ch, method, properties, body):
         try:
-            self.gevent_pool(body)  # 将获得的数据放入协程池中
+            print '[*] Receive message. %s' % body
+            self.gevent_pool(body.split('\n'))  # 将获得的数据放入协程池中
         except Exception as e:
             return e
 
@@ -46,9 +47,9 @@ class OriginIpReverse:
         coroutine_num: 协程数
         split_num: 块儿大小，即每一组放入到协程池中的总ip数量
         """
-        coroutine_num = 500
+        coroutine_num = 10
         p = Pool(coroutine_num)
-        split_num = 20000
+        split_num = 4
         tasks = []
         for ip_block in range(0, len(origin_ip_set), split_num):
             ip_set = origin_ip_set[ip_block:ip_block+split_num]
@@ -56,14 +57,35 @@ class OriginIpReverse:
                 tasks.append(p.spawn(exper, ip, [1, 2, 3]))
             gevent.joinall(tasks)
 
+        # for task in tasks:
+        #     print task.value  # 返回的数据结构为tuple类型 (ip, [domains])
+        #     self.channel.queue_declare(queue='dns_verification')
+        #     self.channel.basic_publish(exchange='',
+        #                                routing_key='dns_verification',
+        #                                body=task.value)
+        #     print 'send success'
+
     def mult_processing_mode(self, processing_num):
         """
         :param procrss_num: 进程数量
         :return: None
         """
+        process_list = []
+        for i in range(processing_num+1):  # 开启processing_num个子进程执行fun1函数
+            p = Process(target=self.rabbitmq_comsumer, args=())  # 实例化进程对象
+            p.start()
+            process_list.append(p)
+
+        for i in process_list:
+            p.join()
         pass
 
 
 if __name__ == '__main__':
     Task = OriginIpReverse()
-    Task.mult_processing_mode(processing_num=4)  # 多进程模式
+    # processing_num = 4
+    # process_list = []
+    # for i in range(processing_num):  # 开启processing_num个子进程执行fun1函数
+    #     p = Process(target=Task.rabbitmq_comsumer, args=())  # 实例化进程对象
+    #     p.start()
+    Task.rabbitmq_comsumer()

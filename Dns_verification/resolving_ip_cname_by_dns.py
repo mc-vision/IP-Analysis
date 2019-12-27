@@ -7,6 +7,7 @@
 import dns
 import dns.resolver
 import random
+import pika
 
 
 class DomainRecord(object):
@@ -63,19 +64,37 @@ class DomainRecord(object):
             self.ip_cname_status = 'UNEXPECTED ERRORS'
 
 
-def obtaining_domain_ip(original_domain, local_dns=None):
+def obtaining_domain_ip(original_message, local_dns=None):
     """
     获取域名dns记录，local_dns：必须为列表
     """
-    if local_dns is None:
-        local_dns = []
-    domain_obj = DomainRecord(original_domain, local_dns)
-    domain_obj.fetch_rc_ttl()
-    return domain_obj.return_domain_rc()[0]
+    print "received messages: ", original_message
+    original_message = eval(original_message)
+    # print type(original_message)
+    ip = original_message[0]
+    domain_list = original_message[1]
+    # print ip
+    # print domain_list
+    for domain in domain_list:
+        if local_dns is None:
+            local_dns = []
+        domain_obj = DomainRecord(domain, local_dns)
+        domain_obj.fetch_rc_ttl()
+        send_message = (ip, domain, domain_obj.return_domain_rc()[0])
+        print send_message
+        connection = pika.BlockingConnection(
+            pika.ConnectionParameters(host='10.245.146.146', port=5672,
+                                      credentials=pika.PlainCredentials("hit", "hit")))
+        channel = connection.channel()
+        channel.queue_declare(queue='malicious_detection')
+        channel.basic_publish(exchange='',
+                              routing_key='malicious_detection',
+                              body=str(send_message))
+        print(" [x] Sent Success!"), send_message
+
+    #  [u'hehui-scm.com', u'jun996.com', u'88dy.com', u'intwolf.com', u'wmcomw.com', u'mmmfuli.com', u'ntdongzi.com']
 
 
 if __name__ == '__main__':
     # print obtaining_domain_ip('www.zhihu.com')
-    print obtaining_domain_ip('shunwang.com')
-
-    #  [u'hehui-scm.com', u'jun996.com', u'88dy.com', u'intwolf.com', u'wmcomw.com', u'mmmfuli.com', u'ntdongzi.com']
+    print obtaining_domain_ip('www.baidu.com')

@@ -11,6 +11,7 @@ from tldextract import extract
 import urllib2
 import time
 import sys
+import pika
 
 
 class BGPSpider(DriverHandler):
@@ -183,7 +184,17 @@ def exper(ip, spider_id):
     for domains in generator:
         for domain in domains:
             rst.append(domain)
-    return rst
+    send_message = (ip, rst)
+    connection = pika.BlockingConnection(
+        pika.ConnectionParameters(host='10.245.146.146', port=5672,
+                                  credentials=pika.PlainCredentials("hit", "hit")))
+    channel = connection.channel()
+    channel.queue_declare(queue='dns_verification')
+    channel.basic_publish(exchange='',
+                          routing_key='dns_verification',
+                          body=str(send_message))
+    print(" [x] Sent Success!")
+    return ip, rst
 
 
 if __name__ == "__main__":
