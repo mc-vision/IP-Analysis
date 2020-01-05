@@ -168,33 +168,37 @@ class AizhanSpider(object):
 
 def exper(ip, spider_id):
     generator, rst = [], []
-    if 1 in spider_id:
-        bgp=BGPSpider()
-        # print bgp.spider(ip)
-        generator.append(i for i in bgp.spider(ip)['domains'])
-        bgp.destory_driver()
-    if 2 in spider_id:
-        dbd=DomainBigDataSpider()
-        # print dbd.spider(ip)
-        generator.append(i for i in dbd.spider(ip)['domains'])
-    if 3 in spider_id:
-        aizhan=AizhanSpider()
-        # print aizhan.spider(ip)
-        generator.append(i for i in aizhan.spider(ip)['domains'])
-    for domains in generator:
-        for domain in domains:
-            rst.append(domain)
-    send_message = (ip, rst)
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters(host='10.245.146.146', port=5672,
-                                  credentials=pika.PlainCredentials("hit", "hit")))
-    channel = connection.channel()
-    channel.queue_declare(queue='dns_verification')
-    channel.basic_publish(exchange='',
-                          routing_key='dns_verification',
-                          body=str(send_message))
-    print(" [x] Sent Success!")
-    return ip, rst
+    try:
+        if 1 in spider_id:
+            bgp=BGPSpider()
+            # print bgp.spider(ip)
+            generator.append(i for i in bgp.spider(ip)['domains'])
+            bgp.destory_driver()
+        if 2 in spider_id:
+            dbd=DomainBigDataSpider()
+            # print dbd.spider(ip)
+            generator.append(i for i in dbd.spider(ip)['domains'])
+        if 3 in spider_id:
+            aizhan=AizhanSpider()
+            # print aizhan.spider(ip)
+            generator.append(i for i in aizhan.spider(ip)['domains'])
+        for domains in generator:
+            for domain in domains:
+                rst.append(domain)
+        send_message = (ip, rst)
+        connection = pika.BlockingConnection(
+            pika.ConnectionParameters(host='10.245.146.146', port=5672,
+                                      credentials=pika.PlainCredentials("hit", "hit")))
+        channel = connection.channel()
+        channel.queue_declare(queue='dns_verification')
+        channel.basic_publish(exchange='',
+                              routing_key='dns_verification',
+                              body=str(send_message))
+        print(" [x] Sent Success!")
+        return ip, rst
+    except Exception as e:
+        print e
+        pass
 
 
 if __name__ == "__main__":

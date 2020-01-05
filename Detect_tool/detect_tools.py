@@ -4,7 +4,7 @@ from tencent_detect import TencentManager
 from baidu_detect import BaiduDefender
 from Sanliuling_detect import Sanliuling
 from Jinshan_detect import Jinshan
-from macfree_detect import Macfree
+from macfee_detect import Macfree
 from virustotal_detect import Virustotal
 
 import pika
