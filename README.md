@@ -45,4 +45,4 @@ developing...
 * Kafka/RabbitMQ 消息队列
 * Zookeeper 集群注册中心
 * ElasticSearch 检索
-* 其他web类作为前端 还未计划
+* 其他大数据技术
