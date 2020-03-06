@@ -9,9 +9,15 @@ channel = connection.channel()
 
 channel.queue_declare(queue='origin_ip')
 
-for ip in ips.split('\n'):
-    channel.basic_publish(exchange='',
-                          routing_key='origin_ip',
-                          body=ip)
-    print(" [x] Sent %s " % ip, 'Success!')
+# for ip in ips.split('\n'):
+#     channel.basic_publish(exchange='',
+#                           routing_key='origin_ip',
+#                           body=ip)
+#     print(" [x] Sent %s " % ip, 'Success!')
+
+# single domain test
+channel.basic_publish(exchange='',
+                      routing_key='origin_ip',
+                      body="39.106.165.57")
+print(" [x] Sent %s " % "39.106.165.57", 'Success!')
 connection.close()

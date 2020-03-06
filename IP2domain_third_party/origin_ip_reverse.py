@@ -28,7 +28,7 @@ class OriginIpReverse:
 
     def callback(self, ch, method, properties, body):
         try:
-            print '[*] Receive message. %s' % body
+            print '[*] Receive original ip. %s' % body
             self.gevent_pool(body.split('\n'))  # 将获得的数据放入协程池中
         except Exception as e:
             return e
@@ -36,7 +36,7 @@ class OriginIpReverse:
     def rabbitmq_comsumer(self):
         self.channel.queue_declare(queue='origin_ip')
         self.channel.basic_consume(on_message_callback=self.callback, queue='origin_ip', auto_ack=True)
-        print(' [*] Waiting for messages. To exit press CTRL+C')
+        print(' [*] Waiting for origin ipv4. data strct is string(ip) ')
         self.channel.start_consuming()
 
     def gevent_pool(self, origin_ip_set):

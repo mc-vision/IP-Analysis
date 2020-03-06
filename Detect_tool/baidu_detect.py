@@ -109,13 +109,14 @@ class BaiduDefender(object):
 
 if __name__ == "__main__":
     #单点测试
-    from Database.database import DB
-    DB = DB()
-    select_sql = "SELECT domain from ip_malicious"
-    domains = DB.select(select_sql)
-    for domain in domains:
-        print domain[0]
+    # from Database.database import DB
+    # DB = DB()
+    # select_sql = "SELECT domain from ip_malicious"
+    # domains = DB.select(select_sql)
+    # for domain in domains:
+    #     print domain[0]
     # domain_list=domain_list.splitlines()
     # for domain in domain_list:
     #     print BaiduDefender.detect_domain(domain)
     # new types
+    print BaiduDefender.detect_domain('760078a.com')

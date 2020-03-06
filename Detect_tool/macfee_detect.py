@@ -76,5 +76,5 @@ class Macfree():
 
 if __name__ == "__main__":
     # 单点测试
-    domain = 'baidu.com'
+    domain = '5655566.com'
     print Macfree.detect_domain(domain)

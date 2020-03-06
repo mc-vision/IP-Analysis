@@ -107,5 +107,5 @@ class Jinshan(object):
 
 
 if __name__ == "__main__":
-    domain = 'weihaiexpo.cn'
+    domain = '760078a.com'
     print Jinshan.detect_domain(domain)
