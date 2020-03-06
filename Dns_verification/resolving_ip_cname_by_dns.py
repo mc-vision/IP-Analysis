@@ -68,13 +68,10 @@ def obtaining_domain_ip(original_message, local_dns=None):
     """
     获取域名dns记录，local_dns：必须为列表
     """
-    print "received messages: ", original_message
+    # print "received messages: ", original_message
     original_message = eval(original_message)
-    # print type(original_message)
     ip = original_message[0]
     domain_list = original_message[1]
-    # print ip
-    # print domain_list
     for domain in domain_list:
         if local_dns is None:
             local_dns = []
@@ -97,4 +94,4 @@ def obtaining_domain_ip(original_message, local_dns=None):
 
 if __name__ == '__main__':
     # print obtaining_domain_ip('www.zhihu.com')
-    print obtaining_domain_ip('www.baidu.com')
+    print obtaining_domain_ip("('39.106.165.57', ['wudly.cn'])")

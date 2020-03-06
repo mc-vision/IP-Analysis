@@ -28,7 +28,7 @@ class DNSVerification:
 
     def callback(self, ch, method, properties, body):
         try:
-            print '[*] Receive message. %s' % body
+            print '[*] Receive (IP, [domains]). %s' % body
             self.gevent_pool(body.split('\n'))  # 将获得的数据放入协程池中
         except Exception as e:
             return e
@@ -36,7 +36,7 @@ class DNSVerification:
     def rabbitmq_comsumer(self):
         self.channel.queue_declare(queue='dns_verification')
         self.channel.basic_consume(on_message_callback=self.callback, queue='dns_verification', auto_ack=True)
-        print(' [*] Waiting for messages. To exit press CTRL+C')
+        print(' [*] Waiting for (IP, [domains]) from MQ.')
         self.channel.start_consuming()
 
     def gevent_pool(self, message_set):
