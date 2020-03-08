@@ -1,4 +1,3 @@
-
 DRIVER_TYPE='chrome'
 HEADLESS=True
 LOAD_PICTURE=False
@@ -9,19 +8,3 @@ DRIVER_SETTINGS=dict(
     chrome_path='/usr/bin/chromedriver'
 )
 
-# mongo settings
-MONGO_SETTINGS= dict(
-    mongo_ip='10.245.146.37',
-    mongo_port=27017,
-    mongo_db='illegal_domains_profile'
-)
-
-# mysql settings
-MYSQL_SETTINGS = dict(
-    host="10.245.146.37",
-    user="root",
-    port = 3306,
-    passwd="platform",
-    db="illegal_domains_profile",
-    charset="utf8"
-)
