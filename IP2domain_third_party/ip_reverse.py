@@ -12,6 +12,9 @@ import urllib2
 import time
 import sys
 import pika
+from Rabbitmq_list.MQ import rabbitmq
+from Rabbitmq_list.MQ import DNS_VERIFICATION
+MQ = rabbitmq()
 
 
 class BGPSpider(DriverHandler):
@@ -186,16 +189,18 @@ def exper(ip, spider_id):
             for domain in domains:
                 rst.append(domain)
         send_message = (ip, rst)
-        connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host='10.245.146.146', port=5672,
-                                      credentials=pika.PlainCredentials("hit", "hit")))
-        channel = connection.channel()
-        channel.queue_declare(queue='dns_verification')
-        channel.basic_publish(exchange='',
-                              routing_key='dns_verification',
-                              body=str(send_message))
+        MQ.publish(queue=DNS_VERIFICATION, data=str(send_message))
         print(" [x] Sent Success!")
         return ip, rst
+        # connection = pika.BlockingConnection(
+        #     pika.ConnectionParameters(host='10.245.146.146', port=5672,
+        #                               credentials=pika.PlainCredentials("hit", "hit")))
+        # channel = connection.channel()
+        # channel.queue_declare(queue='dns_verification')
+        # channel.basic_publish(exchange='',
+        #                       routing_key='dns_verification',
+        #                       body=str(send_message))
+
     except Exception as e:
         print e
         pass

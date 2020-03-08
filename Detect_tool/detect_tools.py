@@ -12,15 +12,18 @@ from gevent.pool import Pool
 from gevent import monkey
 # monkey.patch_all()
 import gevent
+from Rabbitmq_list.MQ import rabbitmq
+from Rabbitmq_list.MQ import DETECTION_RESULT, MALICIOUS_DETECTION
+MQ = rabbitmq()
 
 
 class DetectTools:
     def __init__(self):
         try:
-            connection = pika.BlockingConnection(
-                pika.ConnectionParameters(host='10.245.146.146', port=5672,
-                                          credentials=pika.PlainCredentials("hit", "hit")))
-            self.channel = connection.channel()
+            # connection = pika.BlockingConnection(
+            #     pika.ConnectionParameters(host='10.245.146.146', port=5672,
+            #                               credentials=pika.PlainCredentials("hit", "hit")))
+            self.channel = MQ.new_channel()
         except Exception as err:
             print str(err)
 
@@ -32,8 +35,8 @@ class DetectTools:
             return e
 
     def rabbitmq_comsumer(self):
-        self.channel.queue_declare(queue='malicious_detection')
-        self.channel.basic_consume(on_message_callback=self.callback, queue='malicious_detection', auto_ack=True)
+        self.channel.queue_declare(queue=MALICIOUS_DETECTION)
+        self.channel.basic_consume(on_message_callback=self.callback, queue=MALICIOUS_DETECTION, auto_ack=True)
         print(' [*] Waiting for messages. To exit press CTRL+C')
         self.channel.start_consuming()
 
@@ -45,7 +48,6 @@ class DetectTools:
         coroutine_num: 协程数
         split_num: 块儿大小，即每一组放入到协程池中的总ip数量
         """
-
         message_set = eval(message_set)
         domain = message_set[1]
         coroutine_num = 10
@@ -54,17 +56,19 @@ class DetectTools:
         tasks = []
         tasks.append(p.spawn(BaiduDefender().detect_domain, domain))
         gevent.joinall(tasks)
-        connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host='10.245.146.146', port=5672,
-                                      credentials=pika.PlainCredentials("hit", "hit")))
+        # connection = pika.BlockingConnection(
+        #     pika.ConnectionParameters(host='10.245.146.146', port=5672,
+        #                               credentials=pika.PlainCredentials("hit", "hit")))
+
         for task in tasks:
             total_message = [message_set, task.value]
             print ' [*] All message. ',  total_message
-            channel = connection.channel()
-            channel.queue_declare(queue='detection_result')
-            channel.basic_publish(exchange='',
-                                  routing_key='detection_result',
-                                  body=str(total_message))
+            MQ.publish(queue=DETECTION_RESULT, data=str(total_message))
+            # channel = connection.channel()
+            # channel.queue_declare(queue='detection_result')
+            # channel.basic_publish(exchange='',
+            #                       routing_key='detection_result',
+            #                       body=str(total_message))
             print(" [x] Sent to * MQ - detection_result * Success!"), total_message
             # print type(message_set), type(task.value)
         # for message_blocks in range(0, len(message_set), split_num):

@@ -3,12 +3,11 @@
 """
 利用dns递归服务器，解析出域名的IP
 """
-from Rabbitmq_list.MQ import rabbitmq
-from Rabbitmq_list.MQ import ORIGIN_IP, MALICIOUS_DETECTION
 import dns
 import dns.resolver
 import random
-import pika
+from Rabbitmq_list.MQ import rabbitmq
+from Rabbitmq_list.MQ import ORIGIN_IP, MALICIOUS_DETECTION
 MQ = rabbitmq()
 
 
@@ -108,8 +107,6 @@ def obtaining_domain_ip(original_message, local_dns=None):
             #                       body=str(resloved_ip))
             MQ.publish(data=str(resloved_ip), queue=ORIGIN_IP)
             print "[x] New IP send success!", resloved_ip
-
-    #  [u'hehui-scm.com', u'jun996.com', u'88dy.com', u'intwolf.com', u'wmcomw.com', u'mmmfuli.com', u'ntdongzi.com']
 
 
 if __name__ == '__main__':

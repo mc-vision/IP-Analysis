@@ -14,15 +14,15 @@ from gevent.pool import Pool
 from gevent import monkey
 import gevent
 from resolving_ip_cname_by_dns import obtaining_domain_ip  # dns探测
+from Rabbitmq_list.MQ import rabbitmq
+from Rabbitmq_list.MQ import DNS_VERIFICATION
+MQ = rabbitmq()
 
 
 class DNSVerification:
     def __init__(self):
         try:
-            connection = pika.BlockingConnection(
-                pika.ConnectionParameters(host='10.245.146.146', port=5672,
-                                          credentials=pika.PlainCredentials("hit", "hit")))
-            self.channel = connection.channel()
+            self.channel = MQ.new_channel()
         except Exception as err:
             print str(err)
 
@@ -34,8 +34,8 @@ class DNSVerification:
             return e
 
     def rabbitmq_comsumer(self):
-        self.channel.queue_declare(queue='dns_verification')
-        self.channel.basic_consume(on_message_callback=self.callback, queue='dns_verification', auto_ack=True)
+        self.channel.queue_declare(queue=DNS_VERIFICATION)
+        self.channel.basic_consume(on_message_callback=self.callback, queue=DNS_VERIFICATION, auto_ack=True)
         print(' [*] Waiting for (IP, [domains]) from MQ.')
         self.channel.start_consuming()
 

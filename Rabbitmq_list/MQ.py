@@ -19,6 +19,14 @@ class rabbitmq:
             raise e
             pass
 
+    def declare(self, queue):
+        channel = self.__connection.channel()
+        channel.queue_declare(queue=queue)
+        return channel
+
+    def new_channel(self):
+        return self.__connection.channel()
+
     def publish(self, queue, data):
         channel = self.__connection.channel()
         try:
@@ -28,6 +36,13 @@ class rabbitmq:
                                   body=str(data))
         except Exception as e:
             return e
+
+    def consumming(self, callback):
+        channel = self.__connection.channel()
+        channel.queue_declare(queue='dns_verification')
+        channel.basic_consume(on_message_callback=callback, queue='dns_verification', auto_ack=True)
+        # print(' [*] Waiting for (IP, [domains]) from MQ.')
+        channel.start_consuming()
 
 
 if __name__ == '__main__':

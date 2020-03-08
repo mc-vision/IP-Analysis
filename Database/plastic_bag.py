@@ -16,16 +16,19 @@ from gevent import monkey
 import gevent
 # from resolving_ip_cname_by_dns import obtaining_domain_ip  # dns探测
 from database import DB
+from Rabbitmq_list.MQ import rabbitmq
+from Rabbitmq_list.MQ import DETECTION_RESULT
+MQ = rabbitmq()
 
 
 class DNSVerification:
     def __init__(self):
         self.db = DB()
         try:
-            connection = pika.BlockingConnection(
-                pika.ConnectionParameters(host='10.245.146.146', port=5672,
-                                          credentials=pika.PlainCredentials("hit", "hit")))
-            self.channel = connection.channel()
+            # connection = pika.BlockingConnection(
+            #     pika.ConnectionParameters(host='10.245.146.146', port=5672,
+            #                               credentials=pika.PlainCredentials("hit", "hit")))
+            self.channel = MQ.new_channel()
         except Exception as err:
             print str(err)
 
@@ -38,8 +41,8 @@ class DNSVerification:
             return e
 
     def rabbitmq_comsumer(self):
-        self.channel.queue_declare(queue='detection_result')
-        self.channel.basic_consume(on_message_callback=self.callback, queue='detection_result', auto_ack=True)
+        self.channel.queue_declare(queue=DETECTION_RESULT)
+        self.channel.basic_consume(on_message_callback=self.callback, queue=DETECTION_RESULT, auto_ack=True)
         print(' [*] Waiting for messages. To exit press CTRL+C')
         self.channel.start_consuming()
 

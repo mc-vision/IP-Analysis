@@ -14,15 +14,18 @@ from gevent.pool import Pool  # 协程池
 import gevent
 import pika
 from multiprocessing import Process  # 多进程
+from Rabbitmq_list.MQ import rabbitmq
+from Rabbitmq_list.MQ import ORIGIN_IP
+MQ = rabbitmq()
 
 
 class OriginIpReverse:
     def __init__(self):
         try:
-            connection = pika.BlockingConnection(
-                pika.ConnectionParameters(host='10.245.146.146', port=5672,
-                                          credentials=pika.PlainCredentials("hit", "hit")))
-            self.channel = connection.channel()
+            # connection = pika.BlockingConnection(
+            #     pika.ConnectionParameters(host='10.245.146.146', port=5672,
+            #                               credentials=pika.PlainCredentials("hit", "hit")))
+            self.channel = MQ.new_channel()
         except Exception as err:
             print str(err)
 
@@ -34,8 +37,8 @@ class OriginIpReverse:
             return e
 
     def rabbitmq_comsumer(self):
-        self.channel.queue_declare(queue='origin_ip')
-        self.channel.basic_consume(on_message_callback=self.callback, queue='origin_ip', auto_ack=True)
+        self.channel.queue_declare(queue=ORIGIN_IP)
+        self.channel.basic_consume(on_message_callback=self.callback, queue=ORIGIN_IP, auto_ack=True)
         print(' [*] Waiting for origin ipv4 address from MQ. data structure is string(ip) ')
         self.channel.start_consuming()
 
