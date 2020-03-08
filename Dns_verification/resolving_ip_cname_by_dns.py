@@ -3,11 +3,13 @@
 """
 利用dns递归服务器，解析出域名的IP
 """
-
+from Rabbitmq_list.MQ import rabbitmq
+from Rabbitmq_list.MQ import ORIGIN_IP, MALICIOUS_DETECTION
 import dns
 import dns.resolver
 import random
 import pika
+MQ = rabbitmq()
 
 
 class DomainRecord(object):
@@ -67,31 +69,49 @@ class DomainRecord(object):
 def obtaining_domain_ip(original_message, local_dns=None):
     """
     获取域名dns记录，local_dns：必须为列表
+    :param original_message data structure (string(ip), list[domains])
+    :return None
     """
     # print "received messages: ", original_message
     original_message = eval(original_message)
-    ip = original_message[0]
+    original_ip = original_message[0]
     domain_list = original_message[1]
     for domain in domain_list:
         if local_dns is None:
             local_dns = []
         domain_obj = DomainRecord(domain, local_dns)
         domain_obj.fetch_rc_ttl()
-        send_message = (ip, domain, domain_obj.return_domain_rc()[0])
-        print send_message
-        connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host='10.245.146.146', port=5672,
-                                      credentials=pika.PlainCredentials("hit", "hit")))
-        channel = connection.channel()
-        channel.queue_declare(queue='malicious_detection')
-        channel.basic_publish(exchange='',
-                              routing_key='malicious_detection',
-                              body=str(send_message))
-        print(" [x] Sent Success!"), send_message
+        resloved_ip = domain_obj.return_domain_rc()[0]
+        send_message = (original_ip, domain, resloved_ip)
+
+        # connection = pika.BlockingConnection(
+        #     pika.ConnectionParameters(host='10.245.146.146', port=5672,
+        #                               credentials=pika.PlainCredentials("hit", "hit")))
+        # channel = connection.channel()
+        # channel.queue_declare(queue='malicious_detection')
+        # channel.basic_publish(exchange='',
+        #                       routing_key='malicious_detection',
+        #                       body=str(send_message))
+
+        MQ.publish(data=send_message, queue=MALICIOUS_DETECTION)
+        print("[x] Sent Success!"), send_message
+
+        if original_ip != resloved_ip and resloved_ip != '':
+            # 如果该IP为新增IP，则对其重新再次解析
+            # connection = pika.BlockingConnection(
+            #     pika.ConnectionParameters(host='10.245.146.146', port=5672,
+            #                               credentials=pika.PlainCredentials("hit", "hit")))
+            # channel = connection.channel()
+            # channel.queue_declare(queue='origin_ip')
+            # channel.basic_publish(exchange='',
+            #                       routing_key='origin_ip',
+            #                       body=str(resloved_ip))
+            MQ.publish(data=str(resloved_ip), queue=ORIGIN_IP)
+            print "[x] New IP send success!", resloved_ip
 
     #  [u'hehui-scm.com', u'jun996.com', u'88dy.com', u'intwolf.com', u'wmcomw.com', u'mmmfuli.com', u'ntdongzi.com']
 
 
 if __name__ == '__main__':
     # print obtaining_domain_ip('www.zhihu.com')
-    print obtaining_domain_ip("('39.106.165.57', ['wudly.cn'])")
+    obtaining_domain_ip("('204.11.56.48', ['iposei.com'])")

@@ -16,8 +16,11 @@ channel.queue_declare(queue='origin_ip')
 #     print(" [x] Sent %s " % ip, 'Success!')
 
 # single domain test
-channel.basic_publish(exchange='',
-                      routing_key='origin_ip',
-                      body="39.106.165.57")
-print(" [x] Sent %s " % "39.106.165.57", 'Success!')
+
+domains = ["204.11.56.48"]
+for domain in domains:
+    channel.basic_publish(exchange='',
+                          routing_key='origin_ip',
+                          body=domain)
+    print(" [x] Sent %s " % domain, 'Success!')
 connection.close()
