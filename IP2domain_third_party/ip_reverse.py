@@ -195,9 +195,12 @@ def exper(ip, spider_id):
         send_message = (ip, rst)
         MQ.publish(queue=DNS_VERIFICATION, data=str(send_message))
         print(" [x] Sent Success!")
-        for domain in rst:
-            DB().insert(generate_sql_by_ip_domain(ip=ip, domain=domain))
-        return ip, rst
+        try:
+            domain_list = ';'.join(rst)
+            DB().insert(generate_sql_by_ip_domain(ip=ip, domain=domain_list))
+        except Exception as e:
+            return e
+        # return ip, rst
         # connection = pika.BlockingConnection(
         #     pika.ConnectionParameters(host='10.245.146.146', port=5672,
         #                               credentials=pika.PlainCredentials("hit", "hit")))
