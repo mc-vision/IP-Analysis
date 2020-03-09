@@ -71,6 +71,7 @@ class DNSVerification:
         #                                routing_key='dns_verification',
         #                                body=task.value)
         #     print 'send success'
+
     def db_execute(self, detection_result):
         detection_result = eval(detection_result)
         print " [*] recv message. ", detection_result

@@ -13,6 +13,7 @@ from ip_reverse import exper
 from gevent.pool import Pool  # 协程池
 import gevent
 import pika
+# 第三方库
 from multiprocessing import Process  # 多进程
 from Rabbitmq_list.MQ import rabbitmq
 from Rabbitmq_list.MQ import ORIGIN_IP
