@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-from Dns_verification.resolving_ip_cname_by_dns import obtaining_domain_ip
-from IP2domain_third_party.ip_reverse import exper
+from DNS_Verification.resolving_ip_cname_by_dns import obtaining_domain_ip
+from IP_Reverse.ip_reverse import exper
 from Database.database import DB
 
 import gevent

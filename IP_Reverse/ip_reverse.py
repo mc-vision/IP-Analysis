@@ -13,12 +13,11 @@ import time
 import sys
 import pika
 # 第三方库
-from Public_tools.database import generate_sql_by_ip_domain
+from Public_Tools.database import generate_sql_by_ip_domain
 from Database.database import DB
 from Rabbitmq_list.MQ import rabbitmq
 from Rabbitmq_list.MQ import DNS_VERIFICATION
 MQ = rabbitmq()
-
 
 
 class BGPSpider(DriverHandler):
@@ -30,18 +29,21 @@ class BGPSpider(DriverHandler):
 
         DriverHandler.__init__(self, 'chrome', max_time=timeout)
         self.result = {}
-        self.counter=0
+        self.counter = 0
         self.base_url = 'https://bgp.he.net/ip/{ip}#_dns'
 
     def spider(self, ip):
-
-        self.counter+=1
+        """
+        :param ip: String
+        :return result: dict
+        """
+        self.counter += 1
         if not self.result.get(ip):
             self.result[ip] = {}
             self.result[ip]['cur_time'] = datetime.now()
-        url=self.base_url.format(ip=ip)
-        domains=set()
-        flag=self.open_web(url)
+        url = self.base_url.format(ip=ip)
+        domains = set()
+        flag = self.open_web(url)
         if flag:
             try:
                 soup = BeautifulSoup(self.driver.page_source, 'lxml')
@@ -54,12 +56,12 @@ class BGPSpider(DriverHandler):
                     for a_tip in a_tips:
                         domain = a_tip.attrs['title'].strip()
                         domains.add(domain)
-        if not flag or self.counter%10==0:
+        if not flag or self.counter % 10 == 0:
             self.destory_driver()
             self.create_driver()
-            self.counter=0
-        self.result[ip]['domains']=domains
-        result=dict(ip=ip,**self.result[ip])
+            self.counter = 0
+        self.result[ip]['domains'] = domains
+        result=dict(ip=ip, **self.result[ip])
         del self.result[ip]
 
         return result
@@ -70,16 +72,15 @@ class DomainBigDataSpider(object):
     https://domainbigdata.com/
     """
 
-    def __init__(self, timeout=10,wait_time=1):
+    def __init__(self, timeout=10, wait_time=1):
 
         self.result = {}
         self.base_url = 'https://domainbigdata.com/{ip}'
         self.timeout = timeout
-        self.wait_time=wait_time
+        self.wait_time = wait_time
 
     def spider(self, ip):
         """
-
         :param ip: 
         :return: 
         """
@@ -96,13 +97,13 @@ class DomainBigDataSpider(object):
             try:
                 soup = BeautifulSoup(response, 'lxml')
             except Exception,e:
-                print "parse error:",str(e)
+                print "parse error:", str(e)
             else:
                 lis = soup.find(name='div', attrs={'id': 'MainMaster_divRptDomainsOnSameIP'})
                 if lis:
                     a_tips = lis.find_all(name='a', href=True)
-                    domains = domains|set([a_tip.text.strip() for a_tip in a_tips])
-        self.result[ip]['domains']=domains
+                    domains = domains | set([a_tip.text.strip() for a_tip in a_tips])
+        self.result[ip]['domains'] = domains
         result = dict(ip=ip, **self.result[ip])
         del self.result[ip]
 
@@ -127,7 +128,7 @@ class AizhanSpider(object):
         :param page_index: 
         :return:
         """
-        if page_index<0:
+        if page_index < 0:
             print "page index is error!"
             sys.exit(-1)
         # print "spider the %dth page"%(page_index+1)
@@ -136,8 +137,8 @@ class AizhanSpider(object):
             self.result = {}
         if not self.result.has_key(ip):
             self.result[ip] = {}
-            self.result[ip]['cur_time']=datetime.now()
-            self.result[ip]['domains']=set()
+            self.result[ip]['cur_time'] = datetime.now()
+            self.result[ip]['domains'] = set()
         if page_index==0 or page_index < self.page_num:
             url = self.base_url % (ip, page_index)
             try:
@@ -155,18 +156,19 @@ class AizhanSpider(object):
                         ul_tip=soup.find(name='div',attrs={'class':'dns-infos'}).ul
                         if ul_tip:
                             lis=ul_tip.find_all(name='li')
-                            if len(lis)==3:
-                                domains_num=int(lis[2].span.text.strip())
-                                self.page_num=domains_num//20
-                                if domains_num%20!=0:self.page_num+=1
+                            if len(lis) == 3:
+                                domains_num = int(lis[2].span.text.strip())
+                                self.page_num = domains_num//20
+                                if domains_num % 20 != 0:
+                                    self.page_num += 1
                                 # print "has %d pages"%self.page_num
-                    domains_tip=soup.find_all(name='td',attrs={'class':'domain'})[1:]
+                    domains_tip = soup.find_all(name='td', attrs={'class': 'domain'})[1:]
                     for domain_tip in domains_tip:
-                        domain=domain_tip.a.text.strip()
-                        domain=extract(domain).registered_domain
+                        domain = domain_tip.a.text.strip()
+                        domain = extract(domain).registered_domain
                         if domain:
                             self.result[ip]['domains'].add(domain)
-            self.spider(ip,page_index=page_index+1)
+            self.spider(ip, page_index=page_index+1)
 
         result = self.result[ip]
 
@@ -177,16 +179,16 @@ def exper(ip, spider_id):
     generator, rst = [], []
     try:
         if 1 in spider_id:
-            bgp=BGPSpider()
+            bgp = BGPSpider()
             # print bgp.spider(ip)
             generator.append(i for i in bgp.spider(ip)['domains'])
             bgp.destory_driver()
         if 2 in spider_id:
-            dbd=DomainBigDataSpider()
+            dbd = DomainBigDataSpider()
             # print dbd.spider(ip)
             generator.append(i for i in dbd.spider(ip)['domains'])
         if 3 in spider_id:
-            aizhan=AizhanSpider()
+            aizhan = AizhanSpider()
             # print aizhan.spider(ip)
             generator.append(i for i in aizhan.spider(ip)['domains'])
         for domains in generator:
